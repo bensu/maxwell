@@ -126,6 +126,30 @@
   [version]
   (.isVersionOrHigher engine version))
 
+;; Device
+;; ======
+
+(def device (.-device goog.labs.userAgent))
+
+(defn desktop? []
+  (.isDesktopt device))
+
+(defn mobile? []
+  (.isMobile device))
+
+(defn tablet? []
+  (.isTablet device))
+
+(defn get-device
+  "Returns a keyword with the device type.
+  Ex: :desktop, :mobile, :tablet, :unknown"
+  []
+  (cond
+    (desktop?) :desktop
+    (mobile?) :mobile
+    (tablet?) :tablet
+    :else :unknown))
+
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
