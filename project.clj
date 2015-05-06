@@ -1,5 +1,5 @@
 (defproject maxwell "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
+  :description "Minimal Wrapper around goog.userAgent to report stacktraces"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}

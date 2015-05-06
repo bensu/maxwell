@@ -215,11 +215,12 @@
 
 (def testing goog.testing)
 
-(try
-  (throw (js/Error. "First error"))
-  (catch js/Error e
-    (.log js/console e)))
+(defn e->str [e]
+  nil)
 
+(defn e->map [e]
+  {:msg (pr-str (.-message e))
+   :stack (pr-str (.-stack e))})
 
 ;; User
 ;; ====
@@ -231,5 +232,3 @@
   {:browser (get-browser)
    :engine (get-engine)
    :agent (get-agent)})
-
-(println (spy))
