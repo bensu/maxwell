@@ -197,8 +197,8 @@
   [version]
   (.isVersionOrHigher platform version))
 
-;; Util
-;; ====
+;; User Agent 
+;; ==========
 
 (def util (.-util goog.labs.userAgent))
 
@@ -207,6 +207,19 @@
 
 (defn agent->tuples [agent]
   (js->clj (.extractVersionTuples util agent)))
+
+;; Stack Traces
+;; ============
+
+;; TODO: Implement a cross-browser stack serialization method
+
+(def testing goog.testing)
+
+(try
+  (throw (js/Error. "First error"))
+  (catch js/Error e
+    (.log js/console e)))
+
 
 ;; User
 ;; ====
