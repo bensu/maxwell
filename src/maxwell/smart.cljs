@@ -1,4 +1,5 @@
-(ns ^:figwheel-always maxwell.smart)
+(ns ^:figwheel-always maxwell.smart
+    )
 
 (enable-console-print!)
 
@@ -207,10 +208,15 @@
 (defn agent->tuples [agent]
   (js->clj (.extractVersionTuples util agent)))
 
-(println (agent->tuples (get-agent)))
+;; User
+;; ====
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-) 
+;; TODO: conditionally add platform & device
+(defn spy
+  "Returns a map with all available user info"
+  []
+  {:browser (get-browser)
+   :engine (get-engine)
+   :agent (get-agent)})
+
+(println (spy))

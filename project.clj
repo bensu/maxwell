@@ -6,32 +6,32 @@
 
   :dependencies [[org.clojure/clojure "1.7.0-beta2" :scope "provided"]
                  [org.clojure/clojurescript "0.0-3211" :scope "provided"]
-                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]] 
 
   :plugins [[lein-cljsbuild "1.0.5"]
-            [lein-figwheel "0.2.9"]]
+            [lein-figwheel "0.3.1"]]
 
   :source-paths ["src"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
   
-  :cljsbuild {
-    :builds [{:id "dev"
-              :source-paths ["src"]
+  :cljsbuild 
+  {:builds [{:id "dev"
+             :source-paths ["src"]
               
-              :figwheel { :on-jsload "maxwell.smart/on-js-reload" }
+             :figwheel :true 
 
-              :compiler {:main maxwell.smart
-                         :asset-path "js/compiled/out"
-                         :output-to "resources/public/js/compiled/maxwell.js"
-                         :output-dir "resources/public/js/compiled/out"
-                         :optimizations :none
-                         :source-map true
-                         :source-map-timestamp true
-                         :cache-analysis true }}
-             {:id "min"
-              :source-paths ["src"]
-              :compiler {:output-to "resources/public/js/compiled/maxwell.js"
-                         :main maxwell.smart
-                         :optimizations :advanced
-                         :pretty-print false}}]})
+             :compiler {:main maxwell.smart
+                        :asset-path "js/compiled/out"
+                        :output-to "resources/public/js/compiled/maxwell.js"
+                        :output-dir "resources/public/js/compiled/out"
+                        :optimizations :none
+                        :source-map true
+                        :source-map-timestamp true
+                        :cache-analysis true }}
+            {:id "min"
+             :source-paths ["src"]
+             :compiler {:output-to "resources/public/js/compiled/maxwell.js"
+                        :main maxwell.smart
+                        :optimizations :advanced
+                        :pretty-print false}}]})
