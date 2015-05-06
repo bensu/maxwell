@@ -196,6 +196,19 @@
   [version]
   (.isVersionOrHigher platform version))
 
+;; Util
+;; ====
+
+(def util (.-util goog.labs.userAgent))
+
+(defn get-agent []
+  (.getUserAgent util))
+
+(defn agent->tuples [agent]
+  (js->clj (.extractVersionTuples util agent)))
+
+(println (agent->tuples (get-agent)))
+
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
