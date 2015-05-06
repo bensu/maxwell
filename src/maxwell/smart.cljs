@@ -7,6 +7,8 @@
 
 (def browser (.-browser goog.labs.userAgent))
 
+;; Note: All this fns can be safely memoized
+
 (defn android-browser? []
   (.isAndroidBrowser browser))
 
@@ -34,6 +36,7 @@
 (defn opera? []
   (.isOpera browser))
 
+;; TODO: The order should be optimized by browser popularity
 (defn get-browser
   "Returns a keyword with the Browser
   Ex: :chrome, :safari, :firefox"
@@ -59,24 +62,72 @@
   []
   (.getVersion browser))
 
-(defn higher-version?
-  "Takes a browser version, and <= compares to the current one
-  Ex: (higher-version? 2) => true, because we are at version 3
-      (higher-version \"42.0.2311.135\") => true because we are at 42.0.2311.135
-      (higher-version 10) => false because we are at 8"
-  [v]
-  (.isVersionOrHigher browser v))
+(defn browser>=
+  "Whether the running browser version is higher or the same (>=) as the 
+   given version.
+  (running-browser-version >= given-version)
+  Ex: if the running version is 3 then (browser>= 2) -> (3 >= 2) -> true 
+      if the running version is \"42.0.2311.135\" then
+        (browser>= \"43\") -> (\"42.0.2311.135\" >= \"43\") -> false"
+  [version]
+  (.isVersionOrHigher browser version))
 
-(println (chrome?))
-(println (android-browser?))
-(println (opera?))
-(println (get-browser))
-(println (get-browser-version))
-(println (higher-version? "41"))
+;; Engine
+;; ======
+
+(def engine (.-engine goog.labs.userAgent))
+
+;; TODO: check Closure library version before using this 
+(defn edge?
+  "Included in the latest Closure Library"
+  []
+  (.isEdge engine))
+
+(defn gecko? []
+  (.isGecko engine))
+
+(defn presto? []
+  (.isPresto engine))
+
+(defn trident? []
+  (.isTrident engine))
+
+(defn webkit? []
+  (.isWebKit engine))
+
+;; TODO: The order should be optimized by engine popularity
+(defn get-engine
+  "Returns a keyword with the Browser
+  Ex: :chrome, :safari, :firefox"
+  []
+  (cond
+    (gecko?) :gecko
+    (presto?) :presto
+    (trident?) :trident
+    (webkit?) :webkit
+    (edge?) :edge
+    :else :unknown))
+
+;; Engine Version
+;; ==============
+
+(defn engine-version
+  "Gets the running engine version or \"\" if it can't be determined"
+  []
+  (.getVersion engine))
+
+(defn engine>=
+  "Whether the running engine version is higher or the same (>=) as the 
+   given version.
+  (running-engine-version >= given-version)
+  Ex: if the running version is 3 then (engine>= 2) -> (3 >= 2) -> true 
+      if the running version is \"537.36\" then
+        (browser>= \"540\") -> (\"537.36\" >= \"540\") -> false"
+  [version]
+  (.isVersionOrHigher engine version))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 ) 
-
