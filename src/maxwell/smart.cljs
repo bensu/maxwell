@@ -1,7 +1,4 @@
-(ns ^:figwheel-always maxwell.smart
-    )
-
-(enable-console-print!)
+(ns maxwell.smart)
 
 ;; Browser
 ;; =======
