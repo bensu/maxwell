@@ -129,10 +129,12 @@
 ;; Device
 ;; ======
 
+;; This namespace is only present in the latest Google Closure Library
+
 (def device (.-device goog.labs.userAgent))
 
 (defn desktop? []
-  (.isDesktopt device))
+  (.isDesktop device))
 
 (defn mobile? []
   (.isMobile device))
