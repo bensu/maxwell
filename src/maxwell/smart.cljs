@@ -152,6 +152,50 @@
     (tablet?) :tablet
     :else :unknown))
 
+;; Platform
+
+;; Only Present in latest Closure Library version
+
+(def platform (.-platform goog.labs.userAgent))
+
+(defn android? []
+  (.isAndroid platform))
+
+(defn chrome-os? []
+  (.isChromeOS platform))
+
+(defn iOS? []
+  (.isIos platform))
+
+(defn iPad? []
+  (.isIpad platform))
+
+(defn iPhone? []
+  (.isIphone platform))
+
+(defn iPod? []
+  (.isIpod platform))
+
+(defn linux? []
+  (.isLinux platform))
+
+(defn mac? []
+  (.isMachintosh platform))
+
+(defn windows? []
+  (.isWindows platform))
+
+;; TODO: correct versions for Docstring
+(defn platform>=
+  "Whether the running platform version is higher or the same (>=) as the 
+   given version.
+  (running-platform-version >= given-version)
+  Ex: if the running version is 3 then (engine>= 2) -> (3 >= 2) -> true 
+      if the running version is \"537.36\" then
+        (browser>= \"540\") -> (\"537.36\" >= \"540\") -> false"
+  [version]
+  (.isVersionOrHigher platform version))
+
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
