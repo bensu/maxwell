@@ -227,5 +227,7 @@
   "Returns a map with all available user info"
   []
   {:browser (get-browser)
+   :browser-version (browser-version)
    :engine (get-engine)
+   :engine-version (engine-version)
    :agent (get-agent)})
