@@ -219,6 +219,21 @@
   {:msg (pr-str (.-message e))
    :stack (pr-str (.-stack e))})
 
+;; Screen
+;; ======
+
+;; Source: http://stackoverflow.com/questions/3437786/get-the-size-of-the-screen-current-web-page-and-browser-window   
+(defn spy-screen
+  "Returns the size of the inner screen in px in a vector [x y]
+  Ex: [1600 720]"
+  []
+  (let [w js/window
+        d js/document
+        e (.-documentElement d)
+        g (aget (.getElementsByTagName d "body") 0)]
+    [(or (.-innerWidth w) (.-clientWidth e) (.-clientWidth g))
+     (or (.-innerHeight w) (.-clientHeight e) (.-clientHeight g))]))
+
 ;; User
 ;; ====
 
@@ -230,4 +245,5 @@
    :browser-version (browser-version)
    :engine (get-engine)
    :engine-version (engine-version)
+   :screen (spy-screen)
    :agent (get-agent)})
