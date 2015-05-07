@@ -207,20 +207,6 @@
 (defn agent->tuples [agent]
   (js->clj (.extractVersionTuples util agent)))
 
-;; Stack Traces
-;; ============
-
-;; TODO: Implement a cross-browser stack serialization method
-
-(def testing goog.testing)
-
-(defn e->str [e]
-  nil)
-
-(defn e->map [e]
-  {:msg (pr-str (.-message e))
-   :stack (pr-str (.-stack e))})
-
 ;; Screen
 ;; ======
 
