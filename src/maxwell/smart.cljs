@@ -35,7 +35,7 @@
   (.isOpera browser))
 
 ;; TODO: The order should be optimized by browser popularity
-(defn get-browser
+(defn spy-browser
   "Returns a keyword with the Browser
   Ex: :chrome, :safari, :firefox"
   []
@@ -54,7 +54,7 @@
 ;; Browser Version
 ;; ===============
 
-(defn browser-version
+(defn spy-browser-version
   "Returns a string with the version in the vendor's format
    Ex: \"42.0.2311.135\" for Chrome"
   []
@@ -94,7 +94,7 @@
   (.isWebKit engine))
 
 ;; TODO: The order should be optimized by engine popularity
-(defn get-engine
+(defn spy-engine
   "Returns a keyword with the Browser
   Ex: :chrome, :safari, :firefox"
   []
@@ -109,7 +109,7 @@
 ;; Engine Version
 ;; ==============
 
-(defn engine-version
+(defn spy-engine-version
   "Gets the running engine version or \"\" if it can't be determined"
   []
   (.getVersion engine))
@@ -140,7 +140,7 @@
 (defn tablet? []
   (.isTablet device))
 
-(defn get-device
+(defn spy-device
   "Returns a keyword with the device type.
   Ex: :desktop, :mobile, :tablet, :unknown"
   []
@@ -194,12 +194,14 @@
   [version]
   (.isVersionOrHigher platform version))
 
+;; TODO: spy-platform
+
 ;; User Agent 
 ;; ==========
 
 (def util (.-util goog.labs.userAgent))
 
-(defn get-agent []
+(defn spy-agent []
   (.getUserAgent util))
 
 (defn agent->tuples [agent]
@@ -241,9 +243,9 @@
 (defn spy
   "Returns a map with all available user info"
   []
-  {:browser (get-browser)
-   :browser-version (browser-version)
-   :engine (get-engine)
-   :engine-version (engine-version)
+  {:browser (spy-browser)
+   :browser-version (spy-browser-version)
+   :engine (spy-engine)
+   :engine-version (spy-engine-version)
    :screen (spy-screen)
-   :agent (get-agent)})
+   :agent (spy-agent)})
