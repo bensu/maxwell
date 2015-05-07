@@ -1,4 +1,6 @@
-(ns maxwell.kaos)
+(ns maxwell.kaos
+  (:require [clojure.string :as s])
+  (:import [goog debug]))
 
 ;; Stack Traces
 ;; ============
@@ -8,11 +10,21 @@
 
 ;; cljs current Closure Library Version has a very small Error object.
 
-(def testing goog.testing)
+;; Kaos objs are browser-normalized errors
 
-(defn e->str [e]
-  nil)
+(def debug goog.debug)
 
-(defn e->map [e]
-  {:msg (pr-str (.-message e))
-   :stack (pr-str (.-stack e))})
+(defn error->kaos [e]
+  (.normalizeErrorObject debug e))
+
+(defn kaos->map
+  "Returns a clj representing the error. Fully serializable"
+  [k]
+  (update (->> (js->clj k)
+            (map (fn [[k v]] {(keyword k) v}))
+            (reduce merge))
+    :stack
+    #(s/split % #"\n")))
+
+(defn throw-error [msg]
+  (js/Error. msg))
