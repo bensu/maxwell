@@ -54,7 +54,7 @@
 ;; Browser Version
 ;; ===============
 
-(defn get-browser-version
+(defn browser-version
   "Returns a string with the version in the vendor's format
    Ex: \"42.0.2311.135\" for Chrome"
   []
