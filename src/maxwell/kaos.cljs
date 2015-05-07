@@ -1,14 +1,11 @@
 (ns maxwell.kaos
-  (:require [clojure.string :as s])
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [clojure.string :as s]
+            [cljs.core.async :as async])
   (:import [goog debug]))
 
 ;; Stack Traces
 ;; ============
-
-;; TODO: Implement a cross-browser stack serialization method or
-;; http://google.github.io/closure-library/api/namespace_goog_debug.html
-
-;; cljs current Closure Library Version has a very small Error object.
 
 ;; Kaos objs are browser-normalized errors
 
@@ -26,5 +23,17 @@
     :stack
     #(s/split % #"\n")))
 
-(defn throw-error [msg]
-  (js/Error. msg))
+(defonce cover-names (atom #{}))
+
+(defn spy!
+  "(spy! cover-name f opts)
+  Registers an error catcher f that takes a normalized error object.
+  opts: - :silence? bool. if true the errors will not hit the console
+        - :target #js [Obj]. if present it will replace window, i.e. target.onerror = catcher; 
+  Ex: (spy! ::printer (fn [e] (println \"I'm an error\")) {:silence? true})"
+  ([cover-name catcher] (spy! cover-name catcher {:silence? false :target nil}))
+  ([cover-name catcher opts]
+   {:pre [(ifn? catcher) (map? opts)]}
+   (when-not (contains? @cover-names cover-name) 
+     (swap! cover-names #(conj % cover-name))
+     (.catchErrors debug catcher (:silence? opts) (:target opts)))))
