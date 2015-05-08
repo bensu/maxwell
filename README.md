@@ -49,26 +49,28 @@ To catch errors, Maxwell can be used in two ways:
 ```clj
 (try
   (save-the-world-from-kaos!)
-  (catch :default e
+  (catch :default raw-error
     ;; Pardon me while I get my shoe phone.
-    (report-to-server (merge (spy/all-info) (kaos/->map e)))))
+    (report-to-server (merge (spy/all-info) (kaos/->map raw-error)))))
 ```
 
-* or with a `window.onerror` wrapper, `kaos/watch-errors!`:
+* or with `kaos/watch-errors!`, which takes a
+  function, and whenever an error is raised to `window` it will
+  normalize it and pass it to said function.
 
 ```clj
 (kaos/watch-errors! :watch-name
     (fn [normalized-error]
         ;; Chief, would you believe...
-        (report-to-server (merge (spy/all-info) e)))
+        (report-to-server (merge (spy/all-info) normalized-error)))
     {:silence? true})
 ```
 
-Notice that each registered error-watch has a name and can pass the
-option to hide the error from the user `:silence?`. Multiple watches
-can be placed and they will not interfere with one another, except for
-the `:silence?` value: the last watch to be placed determines if the
-error will appear in the console or not.
+Notice that the registered error-watch has a name and passed the
+option to hide the error from the user, `{:silence? true}`. Multiple
+watches can be placed and they will not interfere with one another,
+except for the `:silence?` value: the last watch to be placed
+determines if the error will appear in the console or not.
 
 Maxwell can also be used to do browser checking:
 
@@ -83,7 +85,11 @@ Maxwell can also be used to do browser checking:
 
 Pull requests, issues, and feedback welcome.
 
-## License
+## License & Acknowledgments
+
+Special thanks to all ClojureScript contributors and
+[David Nolen](https://github.com/swannodette) for all their
+outstanding work.
 
 Copyright © 2015 Sebastian Bensusan
 
