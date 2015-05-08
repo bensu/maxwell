@@ -1,6 +1,7 @@
 (ns maxwell.kaos
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.string :as s]
+            [clojure.set :as set]
             [cljs.core.async :as async])
   (:import [goog debug]))
 
@@ -15,13 +16,17 @@
   (.normalizeErrorObject debug e))
 
 (defn kaos->map
-  "Returns a clj representing the error. Fully serializable"
+  "Returns a serializable cljs map representing the error with fields:
+  - :message String 
+  - :stack [String]
+  - :file-name String - URL
+  - :line-number Int"
   [k]
-  (update (->> (js->clj k)
-            (map (fn [[k v]] {(keyword k) v}))
-            (reduce merge))
-    :stack
-    #(s/split % #"\n")))
+  (-> (->> (js->clj k)
+        (map (fn [[k v]] {(keyword k) v}))
+        (reduce merge))
+    (update :stack #(s/split % #"\n"))
+    (set/rename-keys {:fileName :file-name :lineNumber :line-number})))
 
 (defonce cover-names (atom #{}))
 
@@ -36,4 +41,5 @@
    {:pre [(ifn? catcher) (map? opts)]}
    (when-not (contains? @cover-names cover-name) 
      (swap! cover-names #(conj % cover-name))
-     (.catchErrors debug catcher (:silence? opts) (:target opts)))))
+     (.catchErrors debug #(catcher (kaos->map %))
+       (:silence? opts) (:target opts)))))
