@@ -17,7 +17,12 @@
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
   
   :profiles {:dev {:plugins [[lein-cljsbuild "1.0.5"]
+                             [codox "0.8.12"]
                              [lein-figwheel "0.3.1"]]}}
+  
+  :codox {:language :clojurescript
+          :src-dir-uri "https://github.com/bensu/maxwell/tree/master/"
+          :src-linenum-anchor-prefix "L"}
 
   :cljsbuild 
   {:builds [{:id "dev"

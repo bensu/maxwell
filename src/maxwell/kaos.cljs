@@ -1,9 +1,7 @@
 (ns maxwell.kaos
   "Handles error normalization and watching"
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.string :as s]
-            [clojure.set :as set]
-            [cljs.core.async :as async])
+            [clojure.set :as set])
   (:import [goog debug]))
 
 ;; Note: goog has two error types, those from window.onerror and
