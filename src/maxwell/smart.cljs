@@ -3,39 +3,39 @@
 ;; Browser
 ;; =======
 
-(def browser (.-browser goog.labs.userAgent))
+(def browser-obj goog.labs.userAgent.browser)
 
 ;; Note: All this fns can be safely memoized
 
 (defn android-browser? []
-  (.isAndroidBrowser browser))
+  (.isAndroidBrowser browser-obj))
 
 (defn chrome? []
-  (.isChrome browser))
+  (.isChrome browser-obj))
 
 (defn coast? []
-  (.isCoast browser))
+  (.isCoast browser-obj))
 
 (defn firefox? []
-  (.isFirefox browser))
+  (.isFirefox browser-obj))
 
 (defn ie? []
-  (.isIE browser))
+  (.isIE browser-obj))
 
 (defn webview? []
-  (.isIosWebview browser))
+  (.isIosWebview browser-obj))
 
 (defn safari? []
-  (.isSafari browser))
+  (.isSafari browser-obj))
 
 (defn silk? []
-  (.isSilk browser))
+  (.isSilk browser-obj))
 
 (defn opera? []
-  (.isOpera browser))
+  (.isOpera browser-obj))
 
 ;; TODO: The order should be optimized by browser popularity
-(defn spy-browser
+(defn browser
   "Returns a keyword with the Browser
   Ex: :chrome, :safari, :firefox"
   []
@@ -54,11 +54,11 @@
 ;; Browser Version
 ;; ===============
 
-(defn spy-browser-version
+(defn browser-version
   "Returns a string with the version in the vendor's format
    Ex: \"42.0.2311.135\" for Chrome"
   []
-  (.getVersion browser))
+  (.getVersion browser-obj))
 
 (defn browser>=
   "Whether the running browser version is higher or the same (>=) as the 
@@ -68,33 +68,33 @@
       if the running version is \"42.0.2311.135\" then
         (browser>= \"43\") -> (\"42.0.2311.135\" >= \"43\") -> false"
   [version]
-  (.isVersionOrHigher browser version))
+  (.isVersionOrHigher browser-obj version))
 
 ;; Engine
 ;; ======
 
-(def engine (.-engine goog.labs.userAgent))
+(def engine-obj (.-engine goog.labs.userAgent))
 
 ;; TODO: check Closure library version before using this 
 (defn edge?
   "Included in the latest Closure Library"
   []
-  (.isEdge engine))
+  (.isEdge engine-obj))
 
 (defn gecko? []
-  (.isGecko engine))
+  (.isGecko engine-obj))
 
 (defn presto? []
-  (.isPresto engine))
+  (.isPresto engine-obj))
 
 (defn trident? []
-  (.isTrident engine))
+  (.isTrident engine-obj))
 
 (defn webkit? []
-  (.isWebKit engine))
+  (.isWebKit engine-obj))
 
 ;; TODO: The order should be optimized by engine popularity
-(defn spy-engine
+(defn engine
   "Returns a keyword with the Browser
   Ex: :chrome, :safari, :firefox"
   []
@@ -109,10 +109,10 @@
 ;; Engine Version
 ;; ==============
 
-(defn spy-engine-version
+(defn engine-version
   "Gets the running engine version or \"\" if it can't be determined"
   []
-  (.getVersion engine))
+  (.getVersion engine-obj))
 
 (defn engine>=
   "Whether the running engine version is higher or the same (>=) as the 
@@ -124,64 +124,51 @@
   [version]
   (.isVersionOrHigher engine version))
 
-;; Device
-;; ======
-
-;; This namespace is only present in the latest Google Closure Library
-
-(def device (.-device goog.labs.userAgent))
-
-(defn desktop? []
-  (.isDesktop device))
-
-(defn mobile? []
-  (.isMobile device))
-
-(defn tablet? []
-  (.isTablet device))
-
-(defn spy-device
-  "Returns a keyword with the device type.
-  Ex: :desktop, :mobile, :tablet, :unknown"
-  []
-  (cond
-    (desktop?) :desktop
-    (mobile?) :mobile
-    (tablet?) :tablet
-    :else :unknown))
-
 ;; Platform
 
-;; Only Present in latest Closure Library version
-
-(def platform (.-platform goog.labs.userAgent))
+(def platform-obj goog.labs.userAgent.platform)
 
 (defn android? []
-  (.isAndroid platform))
+  (.isAndroid platform-obj))
 
 (defn chrome-os? []
-  (.isChromeOS platform))
+  (.isChromeOS platform-obj))
 
-(defn iOS? []
-  (.isIos platform))
+(defn ios? []
+  (.isIos platform-obj))
 
-(defn iPad? []
-  (.isIpad platform))
+(defn ipad? []
+  (.isIpad platform-obj))
 
-(defn iPhone? []
-  (.isIphone platform))
+(defn iphone? []
+  (.isIphone platform-obj))
 
-(defn iPod? []
-  (.isIpod platform))
+(defn ipod? []
+  (.isIpod platform-obj))
 
 (defn linux? []
-  (.isLinux platform))
+  (.isLinux platform-obj))
 
 (defn mac? []
-  (.isMachintosh platform))
+  (.isMachintosh platform-obj))
 
 (defn windows? []
-  (.isWindows platform))
+  (.isWindows platform-obj))
+
+(defn platform []
+  (cond
+    (android?) :android
+    (chrome-os?) :chrome-os
+    (ios?) :ios
+    (ipad?) :ipad
+    (iphone?) :iphone
+    (ipod?) :ipod
+    (linux?) :linux
+    (mac?) :mac
+    (windows?) :windows))
+
+(defn platform-version []
+  (.getVersion platform-obj))
 
 ;; TODO: correct versions for Docstring
 (defn platform>=
@@ -192,26 +179,26 @@
       if the running version is \"537.36\" then
         (browser>= \"540\") -> (\"537.36\" >= \"540\") -> false"
   [version]
-  (.isVersionOrHigher platform version))
+  (.isVersionOrHigher platform-obj version))
 
 ;; TODO: spy-platform
 
 ;; User Agent 
 ;; ==========
 
-(def util (.-util goog.labs.userAgent))
+(def util-obj (.-util goog.labs.userAgent))
 
-(defn spy-agent []
-  (.getUserAgent util))
+(defn agent []
+  (.getUserAgent util-obj))
 
 (defn agent->tuples [agent]
-  (js->clj (.extractVersionTuples util agent)))
+  (js->clj (.extractVersionTuples util-obj agent)))
 
 ;; Screen
 ;; ======
 
 ;; Source: http://stackoverflow.com/questions/3437786/get-the-size-of-the-screen-current-web-page-and-browser-window   
-(defn spy-screen
+(defn screen
   "Returns the size of the inner screen in px in a vector [x y]
   Ex: [1600 720]"
   []
@@ -229,9 +216,11 @@
 (defn spy
   "Returns a map with all available user info"
   []
-  {:browser (spy-browser)
-   :browser-version (spy-browser-version)
-   :engine (spy-engine)
-   :engine-version (spy-engine-version)
-   :screen (spy-screen)
-   :agent (spy-agent)})
+  {:browser (browser)
+   :browser-version (browser-version)
+   :platform (platform)
+   :platform-version (platform-version)
+   :engine (engine)
+   :engine-version (engine-version)
+   :screen (screen)
+   :agent (agent)})
