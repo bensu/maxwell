@@ -1,44 +1,43 @@
-(ns ^:figwheel-always maxwell.smart
+(ns ^:figwheel-always maxwell.spy
   "Finds out all possible information from the client,
    including user-agent, screen size, browser, platform,
-   engine, and their respective versions")
+   engine, and their respective versions"
+  (:import [goog.labs.userAgent browser engine platform util]))
 
 ;; Browser
 ;; =======
 
-(def browser-obj goog.labs.userAgent.browser)
-
 ;; Note: All this fns can be safely memoized
 
 (defn android-browser? []
-  (.isAndroidBrowser browser-obj))
+  (.isAndroidBrowser browser))
 
 (defn chrome? []
-  (.isChrome browser-obj))
+  (.isChrome browser))
 
 (defn coast? []
-  (.isCoast browser-obj))
+  (.isCoast browser))
 
 (defn firefox? []
-  (.isFirefox browser-obj))
+  (.isFirefox browser))
 
 (defn ie? []
-  (.isIE browser-obj))
+  (.isIE browser))
 
 (defn webview? []
-  (.isIosWebview browser-obj))
+  (.isIosWebview browser))
 
 (defn safari? []
-  (.isSafari browser-obj))
+  (.isSafari browser))
 
 (defn silk? []
-  (.isSilk browser-obj))
+  (.isSilk browser))
 
 (defn opera? []
-  (.isOpera browser-obj))
+  (.isOpera browser))
 
 ;; TODO: The order should be optimized by browser popularity
-(defn browser
+(defn get-browser
   "Returns a keyword with the Browser
   Possible return values:
     :android-browser
@@ -71,7 +70,7 @@
   "Returns a string with the version in the vendor's format
    Ex: \"42.0.2311.135\" for Chrome"
   []
-  (.getVersion browser-obj))
+  (.getVersion browser))
 
 (defn browser>=
   "Whether the running browser version is higher or the same (>=) as the 
@@ -81,30 +80,28 @@
       if the running version is \"42.0.2311.135\" then
         (browser>= \"43\") -> (\"42.0.2311.135\" >= \"43\") -> false"
   [version]
-  (.isVersionOrHigher browser-obj version))
+  (.isVersionOrHigher browser version))
 
 ;; Engine
 ;; ======
 
-(def engine-obj (.-engine goog.labs.userAgent))
-
 (defn edge? []
-  (.isEdge engine-obj))
+  (.isEdge engine))
 
 (defn gecko? []
-  (.isGecko engine-obj))
+  (.isGecko engine))
 
 (defn presto? []
-  (.isPresto engine-obj))
+  (.isPresto engine))
 
 (defn trident? []
-  (.isTrident engine-obj))
+  (.isTrident engine))
 
 (defn webkit? []
-  (.isWebKit engine-obj))
+  (.isWebKit engine))
 
 ;; TODO: The order should be optimized by engine popularity
-(defn engine
+(defn get-engine
   "Returns a keyword with the Engine 
   Possible return values:
     :gecko
@@ -128,7 +125,7 @@
 (defn engine-version
   "Gets the running engine version or \"\" if it can't be determined"
   []
-  (.getVersion engine-obj))
+  (.getVersion engine))
 
 (defn engine>=
   "Whether the running engine version is higher or the same (>=) as the 
@@ -142,36 +139,34 @@
 
 ;; Platform
 
-(def platform-obj goog.labs.userAgent.platform)
-
 (defn android? []
-  (.isAndroid platform-obj))
+  (.isAndroid platform))
 
 (defn chrome-os? []
-  (.isChromeOS platform-obj))
+  (.isChromeOS platform))
 
 (defn ios? []
-  (.isIos platform-obj))
+  (.isIos platform))
 
 (defn ipad? []
-  (.isIpad platform-obj))
+  (.isIpad platform))
 
 (defn iphone? []
-  (.isIphone platform-obj))
+  (.isIphone platform))
 
 (defn ipod? []
-  (.isIpod platform-obj))
+  (.isIpod platform))
 
 (defn linux? []
-  (.isLinux platform-obj))
+  (.isLinux platform))
 
 (defn mac? []
-  (.isMachintosh platform-obj))
+  (.isMachintosh platform))
 
 (defn windows? []
-  (.isWindows platform-obj))
+  (.isWindows platform))
 
-(defn platform
+(defn get-platform
   "Returns a keyword with the Platform 
    Possible return values: 
      :android
@@ -198,7 +193,7 @@
     :else :unknown))
 
 (defn platform-version []
-  (.getVersion platform-obj))
+  (.getVersion platform))
 
 ;; TODO: correct versions for Docstring
 (defn platform>=
@@ -209,18 +204,16 @@
       if the running version is \"537.36\" then
         (browser>= \"540\") -> (\"537.36\" >= \"540\") -> false"
   [version]
-  (.isVersionOrHigher platform-obj version))
+  (.isVersionOrHigher platform version))
 
 ;; User Agent 
 ;; ==========
 
-(def util-obj (.-util goog.labs.userAgent))
-
 (defn agent []
-  (.getUserAgent util-obj))
+  (.getUserAgent util))
 
 (defn agent->tuples [agent]
-  (js->clj (.extractVersionTuples util-obj agent)))
+  (js->clj (.extractVersionTuples util agent)))
 
 ;; Screen
 ;; ======
@@ -248,11 +241,11 @@
      :screen
      :agent"
   []
-  {:browser (browser)
+  {:browser (get-browser)
    :browser-version (browser-version)
-   :platform (platform)
+   :platform (get-platform)
    :platform-version (platform-version)
-   :engine (engine)
+   :engine (get-engine)
    :engine-version (engine-version)
    :screen (screen)
    :agent (agent)})

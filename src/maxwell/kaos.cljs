@@ -61,7 +61,7 @@
   opts: - :silence? bool. if true the errors will not hit the console
         - :target #js [Obj]. if present it will replace window, i.e. target.onerror = catcher;
   Ex: (watch-errors! :sigfried
-        (fn [e] (println \"Zis is Kaos! We don't hush here!\"))
+        (fn [e] (println \"Zis is Kaos! We don't shush here!\"))
         {:silence? true})"
   ([cover-name catcher] (watch-errors! cover-name catcher
                           {:silence? false :target nil}))

@@ -10,7 +10,7 @@
   :deploy-repositories [["clojars" {:creds :gpg}]]
 
   :dependencies [[org.clojure/clojure "1.7.0-beta2" :scope "provided"]
-                 [org.clojure/clojurescript "0.0-3255" :scope "provided"]] 
+                 [org.clojure/clojurescript "0.0-3255"]] 
 
   :source-paths ["src"]
 
@@ -23,7 +23,7 @@
   {:builds [{:id "dev"
              :source-paths ["src"]
              :figwheel :true 
-             :compiler {:main maxwell.smart
+             :compiler {:main maxwell.spy
                         :asset-path "js/compiled/out"
                         :output-to "resources/public/js/compiled/maxwell.js"
                         :output-dir "resources/public/js/compiled/out"
@@ -34,6 +34,6 @@
             {:id "min"
              :source-paths ["src"]
              :compiler {:output-to "resources/public/js/compiled/maxwell.js"
-                        :main maxwell.smart
+                        :main maxwell.spy
                         :optimizations :advanced
                         :pretty-print false}}]})

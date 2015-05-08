@@ -1,23 +1,83 @@
-# Maxwell Smart
+# Maxwell
 
-**NOTE: this is not ready since it assumes the latest version of the
-Google Closure Library which is not used by ClojureScript**.
+> Missed it by that much.
+
+I needed to log exceptions in running ClojureScript clients to the
+backend. Maxwell uses the Google Closure Library to extract all
+available information out of the client and normalize the error. It is
+then trivial to send it over the wire.
 
 ## Installing
 
 [![Clojars Project](http://clojars.org/maxwell/latest-version.svg)](http://clojars.org/om-routes)
 
-    (:require [maxwell.smart :as smart])
+    (:require [maxwell.spy :as spy]
+              [maxwell.kaos :as kaos])
 
-## Description
+Requires `[org.clojure/google-closure-library "0.0-20150505-021ed5b3"]`
+or newer, which comes with `[org.clojure/clojurescript "0.0-3255"]`.
 
-I needed to log exceptions in running ClojureScript clients to the
-backend. Maxwell extracts all possible information out of the client,
-serializes the error, and sends it over the wire.
+## Examples
 
-TODO: Example
+To get all available user info we have `spy/all-info`:
 
-## Minimal Example
+```clj
+(spy/all-info)
+=> {:browser :chrome
+    :browser-version "42.0.2311.135"
+    :platform :linux
+    :platform-version "" ;; Linux has no platform-version
+    :engine :webkit
+    :engine-version "537.36"
+    :screen [1535 789]
+    :agent "Mozilla/5.0 (X11; Linux x86_64) ..."}
+```
+To normalize errors we have `kaos/->map`:
+
+```clj
+(kaos/->map (js/Error. "Oh, Max!"))
+=> {:message "Oh, Max!"
+    :stack ["Error: Oh, Max!" "at .../client.js:419:271)"]
+    :file-name "http://localhost:3449/"
+    :line-number "Not available"}
+```
+
+To catch errors, Maxwell can be used in two ways:
+
+* with try-catch
+
+```clj
+(try
+  (save-the-world-from-kaos!)
+  (catch :default e
+    ;; Pardon me while I get my shoe phone.
+    (report-to-server (merge (spy/all-info) (kaos/->map e)))))
+```
+
+* or with a `window.onerror` wrapper, `kaos/watch-errors!`:
+
+```clj
+(kaos/watch-errors! :watch-name
+    (fn [normalized-error]
+        ;; Chief, would you believe...
+        (report-to-server (merge (spy/all-info) e)))
+    {:silence? true})
+```
+
+Notice that each registered error-watch has a name and can pass the
+option to hide the error from the user `:silence?`. Multiple watches
+can be placed and they will not interfere with one another, except for
+the `:silence?` value: the last watch to be placed determines if the
+error will appear in the console or not.
+
+Maxwell can also be used to do browser checking:
+
+```clj
+(println "Don't tell me that they are using IE...")
+
+(when (ie?)
+    (println "I asked you not to tell me that!"))
+```
 
 ## Contributions
 
