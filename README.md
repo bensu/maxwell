@@ -17,6 +17,8 @@ then trivial to send it over the wire.
 Requires `[org.clojure/google-closure-library "0.0-20150505-021ed5b3"]`
 or newer, which comes with `[org.clojure/clojurescript "0.0-3255"]`.
 
+[Generated Docs](http://bensu.github.io/maxwell/)
+
 ## Examples
 
 To get all available user info we have `spy/all-info`:

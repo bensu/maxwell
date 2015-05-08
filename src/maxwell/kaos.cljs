@@ -23,9 +23,9 @@
 ;; 	'fileName': href,
 ;; 	'stack': 'Not available'}
 
-(def ^:private debug goog.debug)
+(def ^:no-doc debug goog.debug)
 
-(defn- normalize
+(defn ^:no-doc normalize
   "Takes a raw error and normalizes it with goog.debug"
   [e]
   (.normalizeErrorObject debug e))
@@ -53,7 +53,7 @@
 ;; The DOM has state, we might as well represent it.
 ;; cover-names remembers the watches that we have already used to
 ;; avoid installing the same watch each time on reload.
-(defonce ^:private cover-names (atom #{}))
+(defonce ^:no-doc cover-names (atom #{}))
 
 (defn watch-errors!
   "(watch-errors! watcher-name f opts)
