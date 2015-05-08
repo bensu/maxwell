@@ -1,4 +1,4 @@
-(ns ^:figwheel-always maxwell.spy
+(ns maxwell.spy
   "Finds out all possible information from the client,
    including user-agent, screen size, browser, platform,
    engine, and their respective versions"
@@ -192,7 +192,9 @@
     (windows?) :windows
     :else :unknown))
 
-(defn platform-version []
+(defn platform-version
+  "Returns the platform version. Returns \"\" for Linux."
+  []
   (.getVersion platform))
 
 ;; TODO: correct versions for Docstring
@@ -209,10 +211,15 @@
 ;; User Agent 
 ;; ==========
 
-(defn agent []
+(defn agent
+  "Returns the user agent string.
+   Ex: [[\"Mozilla/5.0\" \"(X11; Linux x86_64)\"] [\"AppleWebKit/537.36 ...\"]]"
+  []
   (.getUserAgent util))
 
-(defn agent->tuples [agent]
+(defn agent->tuples
+  "Transforms the user-agent string into a set of tuples"
+  [agent]
   (js->clj (.extractVersionTuples util agent)))
 
 ;; Screen

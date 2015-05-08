@@ -1,5 +1,5 @@
 (ns maxwell.kaos
-  "Handles error normalization and watching"
+  "Handles error normalization and error watching"
   (:require [clojure.string :as s]
             [clojure.set :as set])
   (:import [goog debug]))
@@ -23,9 +23,11 @@
 ;; 	'fileName': href,
 ;; 	'stack': 'Not available'}
 
-(def debug goog.debug)
+(def ^:private debug goog.debug)
 
-(defn normalize [e]
+(defn- normalize
+  "Takes a raw error and normalizes it with goog.debug"
+  [e]
   (.normalizeErrorObject debug e))
 
 (defn normalized?
@@ -34,7 +36,7 @@
   (not (undefined? (aget e "fileName"))))
 
 (defn ->map
-  "Returns a serializable cljs map representing the error with fields:
+  "Takes an error and returns a serializable cljs map representing the error with fields:
   - :message String 
   - :stack [String]
   - :file-name String - URL
@@ -51,7 +53,7 @@
 ;; The DOM has state, we might as well represent it.
 ;; cover-names remembers the watches that we have already used to
 ;; avoid installing the same watch each time on reload.
-(defonce cover-names (atom #{}))
+(defonce ^:private cover-names (atom #{}))
 
 (defn watch-errors!
   "(watch-errors! watcher-name f opts)

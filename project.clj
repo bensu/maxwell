@@ -18,7 +18,8 @@
   
   :profiles {:dev {:plugins [[lein-cljsbuild "1.0.5"]
                              [codox "0.8.12"]
-                             [lein-figwheel "0.3.1"]]}}
+                             [lein-figwheel "0.3.1"]]}
+             :doc {:dependencies [[org.clojure/clojurescript "0.0-2985"]]}}
   
   :codox {:language :clojurescript
           :src-dir-uri "https://github.com/bensu/maxwell/tree/master/"
