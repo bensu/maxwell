@@ -213,12 +213,13 @@
 
 (defn agent
   "Returns the user agent string.
-   Ex: [[\"Mozilla/5.0\" \"(X11; Linux x86_64)\"] [\"AppleWebKit/537.36 ...\"]]"
+   Ex: \"Mozilla/5.0 (X11; Linux x86_64)..\" "
   []
   (.getUserAgent util))
 
 (defn agent->tuples
-  "Transforms the user-agent string into a set of tuples"
+  "Transforms the user-agent string into a set of tuples
+  Ex: [[\"Mozilla/5.0\" \"(X11; Linux x86_64)\"] [\"AppleWebKit/537.36 ...\"]]"
   [agent]
   (js->clj (.extractVersionTuples util agent)))
 
