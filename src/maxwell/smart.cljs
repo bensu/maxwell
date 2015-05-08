@@ -1,4 +1,7 @@
-(ns maxwell.smart)
+(ns ^:figwheel-always maxwell.smart
+  "Finds out all possible information from the client,
+   including user-agent, screen size, browser, platform,
+   engine, and their respective versions")
 
 ;; Browser
 ;; =======
@@ -37,7 +40,17 @@
 ;; TODO: The order should be optimized by browser popularity
 (defn browser
   "Returns a keyword with the Browser
-  Ex: :chrome, :safari, :firefox"
+  Possible return values:
+    :android-browser
+    :chrome
+    :coast
+    :firefox
+    :ie
+    :webview
+    :safari
+    :silk
+    :opera
+    :unknown"
   []
   (cond
     (android-browser?) :android-browser
@@ -75,10 +88,7 @@
 
 (def engine-obj (.-engine goog.labs.userAgent))
 
-;; TODO: check Closure library version before using this 
-(defn edge?
-  "Included in the latest Closure Library"
-  []
+(defn edge? []
   (.isEdge engine-obj))
 
 (defn gecko? []
@@ -95,8 +105,14 @@
 
 ;; TODO: The order should be optimized by engine popularity
 (defn engine
-  "Returns a keyword with the Browser
-  Ex: :chrome, :safari, :firefox"
+  "Returns a keyword with the Engine 
+  Possible return values:
+    :gecko
+    :presto
+    :webkit
+    :trident
+    :edge
+    :unknown"
   []
   (cond
     (gecko?) :gecko
@@ -155,7 +171,20 @@
 (defn windows? []
   (.isWindows platform-obj))
 
-(defn platform []
+(defn platform
+  "Returns a keyword with the Platform 
+   Possible return values: 
+     :android
+     :chrome-os
+     :ios
+     :ipad
+     :iphone
+     :ipod
+     :linux
+     :mac
+     :windows
+     :unknown"
+  []
   (cond
     (android?) :android
     (chrome-os?) :chrome-os
@@ -165,7 +194,8 @@
     (ipod?) :ipod
     (linux?) :linux
     (mac?) :mac
-    (windows?) :windows))
+    (windows?) :windows
+    :else :unknown))
 
 (defn platform-version []
   (.getVersion platform-obj))
@@ -180,8 +210,6 @@
         (browser>= \"540\") -> (\"537.36\" >= \"540\") -> false"
   [version]
   (.isVersionOrHigher platform-obj version))
-
-;; TODO: spy-platform
 
 ;; User Agent 
 ;; ==========
@@ -209,12 +237,16 @@
     [(or (.-innerWidth w) (.-clientWidth e) (.-clientWidth g))
      (or (.-innerHeight w) (.-clientHeight e) (.-clientHeight g))]))
 
-;; User
-;; ====
-
-;; TODO: conditionally add platform & device
-(defn spy
-  "Returns a map with all available user info"
+(defn all-info 
+  "Returns a map with all available user info:
+     :browser
+     :browser-version
+     :platform 
+     :platform-version 
+     :engine
+     :engine-version
+     :screen
+     :agent"
   []
   {:browser (browser)
    :browser-version (browser-version)
