@@ -9,8 +9,9 @@
 
   :deploy-repositories [["clojars" {:creds :gpg}]]
 
+  ;; TODO: specify the closure library directly
   :dependencies [[org.clojure/clojure "1.7.0-beta2" :scope "provided"]
-                 [org.clojure/clojurescript "0.0-3255"]] 
+                 [org.clojure/clojurescript "0.0-3269" :scope "provided"]] 
 
   :source-paths ["src"]
 

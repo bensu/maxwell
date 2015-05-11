@@ -23,8 +23,6 @@
 ;; 	'fileName': href,
 ;; 	'stack': 'Not available'}
 
-(def ^:no-doc debug goog.debug)
-
 (defn ^:no-doc normalize
   "Takes a raw error and normalizes it with goog.debug"
   [e]
