@@ -161,7 +161,7 @@
   (.isLinux platform))
 
 (defn mac? []
-  (.isMachintosh platform))
+  (.isMacintosh platform))
 
 (defn windows? []
   (.isWindows platform))
