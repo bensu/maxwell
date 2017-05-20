@@ -9,7 +9,7 @@ then trivial to send it over the wire.
 
 ## Installing
 
-[![Clojars Project](http://clojars.org/maxwell/latest-version.svg)](http://clojars.org/om-routes)
+[![Clojars Project](http://clojars.org/maxwell/latest-version.svg)](http://clojars.org/maxwell)
 
     (:require [maxwell.spy :as spy]
               [maxwell.kaos :as kaos])
